@@ -1,0 +1,240 @@
+:root {
+    --whatsapp-green-dark: #075E54;
+    --whatsapp-green-light: #128C7E;
+    --whatsapp-green-accent: #25D366;
+    --blue-accent: #34B7F1;
+    --red-accent: #e74c3c;
+    --orange-accent: #f39c12;
+    --light-gray: #f4f4f9;
+    --dark-gray: #555;
+    --border-color: #ddd;
+    /* Variables para control de status bar */
+    --status-bar-icon-color: #000000;
+    --status-bar-background: transparent;
+    /* Variables para controlar la distancia del botón desde el borde inferior */
+    --btn-bottom-distance-browser: 20px;       /* Solo para navegadores (incluye móviles) */
+    --btn-bottom-distance-pwa: 0px;            /* Solo para modo PWA */
+    /* Variable para altura del contenedor de texto */
+    --textarea-height: 360px;                  /* Altura del área de texto */
+}
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    background-color: var(--light-gray);
+    color: #333;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    max-height: 100vh;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+.container {
+    background-color: transparent;
+    padding: 20px 30px 25px;
+    border-radius: 12px;
+    width: 100%;
+    max-width: 650px;
+    max-height: 100vh;
+    overflow-y: auto;
+    box-sizing: border-box;
+    padding-bottom: 100px; /* Espacio para el botón fijo */
+}
+h1, h2 {
+    color: var(--whatsapp-green-dark);
+    text-align: center;
+    margin-top: 0;
+    margin-bottom: 20px;
+}
+h1 {
+    font-size: 1.5em;
+}
+.section {
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #eee;
+}
+.section:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+.form-group { margin-bottom: 15px; }
+label { display: block; margin-bottom: 5px; font-weight: bold; color: var(--dark-gray); }
+select, input[type="text"] { 
+    width: 100%; 
+    padding: 12px; 
+    border: 1px solid var(--border-color); 
+    border-radius: 6px; 
+    box-sizing: border-box; 
+    font-size: 16px;
+    min-height: 44px;
+}
+
+/* Estilos específicos para móviles */
+@media (max-width: 768px) {
+    select {
+        padding: 16px;
+        font-size: 16px;
+        min-height: 50px;
+        -webkit-appearance: none;
+        appearance: none;
+        background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6,9 12,15 18,9'%3e%3c/polyline%3e%3c/svg%3e");
+        background-repeat: no-repeat;
+        background-position: right 12px center;
+        background-size: 20px;
+        padding-right: 50px;
+    }
+    .container {
+        padding: 20px 20px 0;
+        margin: 0;
+        border-radius: 0;
+        max-height: 100vh;
+    }
+    body {
+        padding: 0;
+    }
+}
+button {
+    padding: 12px;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.1s;
+}
+button:active { transform: scale(0.98); }
+
+/* Estilos de botones */
+.btn-full-width { width: 100%; }
+.btn-generate { background-color: var(--whatsapp-green-light); color: white; margin-bottom: 10px; }
+.btn-generate:hover { background-color: var(--whatsapp-green-dark); }
+.btn-copy { 
+    background-color: var(--whatsapp-green-accent); 
+    color: white;
+    position: fixed;
+    bottom: var(--btn-bottom-distance-browser);
+    left: 50%;
+    transform: translateX(-50%);
+    width: calc(100% - 60px);
+    max-width: 590px;
+    z-index: 100;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+.btn-copy:hover { background-color: #1DAE54; }
+
+textarea {
+    width: 100% !important; 
+    height: 300px !important; 
+    margin-top: 20px; 
+    padding: 15px;
+    border: 1px dashed var(--border-color); 
+    border-radius: 6px; 
+    box-sizing: border-box;
+    font-family: monospace; 
+    white-space: pre-wrap; 
+    background-color: #f9f9f9;
+    font-size: 14px; 
+    line-height: 1.4;
+    min-height: 200px !important;
+    max-height: none !important;
+    overflow-y: auto;
+    resize: none;
+}
+
+/* Área de texto personalizada para mostrar formato WhatsApp */
+#output {
+    width: 100%;
+    height: var(--textarea-height) !important;
+    min-height: 200px;
+    max-height: calc(100vh - 200px);
+    margin-top: 12px;
+    margin-bottom: 20px;
+    padding: 15px;
+    border: 2px solid #e0e0e0;
+    border-radius: 6px;
+    box-sizing: border-box;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    white-space: pre-wrap;
+    background: linear-gradient(135deg, #f9f9f9 0%, #ffffff 100%);
+    font-size: 14px;
+    line-height: 1.4;
+    color: #333;
+    overflow-y: auto;
+    cursor: text;
+    box-shadow: none;
+}
+
+/* --- NUEVOS ESTILOS --- */
+#selectedApoderadoInfo {
+    background-color: #f0f8ff;
+    border: 1px solid #d1e7fd;
+    border-radius: 6px;
+    padding: 10px;
+    margin-top: -5px;
+    margin-bottom: 15px;
+    font-size: 14px;
+    color: var(--dark-gray);
+}
+
+/* Clases para ocultar/deshabilitar elementos */
+.hidden { display: none !important; }
+
+/* PWA Mode - Padding superior para evitar solapamiento con status bar */
+@media all and (display-mode: fullscreen) {
+    body {
+        padding-top: 30px;
+    }
+    
+    .btn-copy {
+        bottom: calc(var(--btn-bottom-distance-pwa) + env(safe-area-inset-bottom, 0px));
+    }
+    
+    #output {
+        height: var(--textarea-height) !important;
+    }
+    
+    textarea {
+        height: 400px !important;
+    }
+}
+
+/* Ajustes para dispositivos móviles con el botón fijo */
+@media (max-width: 768px) {
+    .btn-copy {
+        width: calc(100% - 40px);
+        bottom: var(--btn-bottom-distance-browser);
+    }
+    
+    .container {
+        padding-bottom: 90px;
+    }
+    
+    #output {
+        height: var(--textarea-height) !important;
+        min-height: 150px;
+    }
+    
+    textarea {
+        height: 400px !important;
+        min-height: 150px !important;
+    }
+}
+
+/* PWA en móvil - Combina modo PWA + móvil */
+@media (max-width: 768px) and (display-mode: fullscreen) {
+    .btn-copy {
+        bottom: calc(var(--btn-bottom-distance-pwa) + env(safe-area-inset-bottom, 0px));
+    }
+    
+    #output {
+        height: var(--textarea-height) !important;
+    }
+    
+    textarea {
+        height: 400px !important;
+    }
+}
