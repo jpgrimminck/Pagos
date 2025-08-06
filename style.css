@@ -30,10 +30,16 @@ body {
     padding: 0;
     overflow: hidden;
     box-sizing: border-box;
+    /* Evitar solapamiento con notch y barras de sistema en móviles */
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
 }
 .container {
     background-color: transparent;
     padding: 20px 30px 25px;
+    /* Ajuste extra para safe-area en top y bottom */
+    padding-top: calc(20px + env(safe-area-inset-top));
+    padding-bottom: calc(100px + env(safe-area-inset-bottom));
     border-radius: 12px;
     width: 100%;
     max-width: 650px;
@@ -116,7 +122,7 @@ button:active { transform: scale(0.98); }
     background-color: var(--whatsapp-green-accent); 
     color: white;
     position: fixed;
-    bottom: var(--btn-bottom-distance-browser);
+    bottom: calc(var(--btn-bottom-distance-browser) + env(safe-area-inset-bottom));
     left: 50%;
     transform: translateX(-50%);
     width: calc(100% - 60px);

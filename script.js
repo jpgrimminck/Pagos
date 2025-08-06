@@ -44,15 +44,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- FUNCIONES DE UTILIDAD ---
     function actualizarTitulo() {
-        // Mostrar solo el siguiente mes y la cantidad de días que tiene
+        // Mostrar días restantes hasta el próximo mes
         const hoy = new Date();
         const anio = hoy.getFullYear();
         const mes = hoy.getMonth();
         const siguienteMesIndex = (mes + 1) % 12;
         const siguienteMes = config.meses[siguienteMesIndex];
-        const diasSiguienteMes = new Date(anio + (mes === 11 ? 1 : 0), siguienteMesIndex + 1, 0).getDate();
-        mainTitle.textContent = `${diasSiguienteMes} días para ${siguienteMes}`;
-        document.title = `Pagos (${diasSiguienteMes} días para ${siguienteMes})`;
+        // Total de días del mes actual
+        const totalDiasMesActual = new Date(anio, mes + 1, 0).getDate();
+        const diasRestantes = totalDiasMesActual - hoy.getDate();
+        mainTitle.textContent = `${diasRestantes} días para ${siguienteMes}`;
+        document.title = `Pagos (${diasRestantes} días para ${siguienteMes})`;
     }
 
     // --- FUNCIONES DE RENDERIZADO Y UI ---
