@@ -37,16 +37,15 @@ body {
 .container {
     background-color: transparent;
     padding: 20px 30px 25px;
-    /* Ajuste extra para safe-area en top y bottom */
-    padding-top: calc(20px + env(safe-area-inset-top));
-    padding-bottom: calc(100px + env(safe-area-inset-bottom));
+    /* Ajuste: usar solo body para safe-areas, no duplicar aquí */
+    padding-top: 20px; /* antes: calc(20px + env(safe-area-inset-top)) */
+    padding-bottom: 100px; /* antes: calc(100px + env(safe-area-inset-bottom)) y había un duplicado */
     border-radius: 12px;
     width: 100%;
     max-width: 650px;
     max-height: 100vh;
     overflow-y: auto;
     box-sizing: border-box;
-    padding-bottom: 100px; /* Espacio para el botón fijo */
 }
 h1, h2 {
     color: var(--whatsapp-green-dark);
@@ -99,9 +98,7 @@ select, input[type="text"] {
         border-radius: 0;
         max-height: 100vh;
     }
-    body {
-        padding: 0;
-    }
+    /* No eliminar padding del body para mantener safe-area */
 }
 button {
     padding: 12px;
@@ -189,22 +186,17 @@ textarea {
 /* Clases para ocultar/deshabilitar elementos */
 .hidden { display: none !important; }
 
-/* PWA Mode - Padding superior para evitar solapamiento con status bar */
-@media all and (display-mode: fullscreen) {
-    body {
-        padding-top: 30px;
-    }
-    
+/* PWA Mode - usar standalone para iOS; mantener safe-areas desde body */
+@media all and (display-mode: standalone) {
     .btn-copy {
         bottom: calc(var(--btn-bottom-distance-pwa) + env(safe-area-inset-bottom, 0px));
     }
-    
-    #output {
-        height: var(--textarea-height) !important;
-    }
-    
-    textarea {
-        height: 400px !important;
+}
+
+/* También cubrir fullscreen por si el navegador lo interpreta así */
+@media all and (display-mode: fullscreen) {
+    .btn-copy {
+        bottom: calc(var(--btn-bottom-distance-pwa) + env(safe-area-inset-bottom, 0px));
     }
 }
 
@@ -231,6 +223,21 @@ textarea {
 }
 
 /* PWA en móvil - Combina modo PWA + móvil */
+@media (max-width: 768px) and (display-mode: standalone) {
+    .btn-copy {
+        bottom: calc(var(--btn-bottom-distance-pwa) + env(safe-area-inset-bottom, 0px));
+    }
+    
+    #output {
+        height: var(--textarea-height) !important;
+    }
+    
+    textarea {
+        height: 400px !important;
+    }
+}
+
+/* Cobertura adicional por si usa fullscreen en PWA */
 @media (max-width: 768px) and (display-mode: fullscreen) {
     .btn-copy {
         bottom: calc(var(--btn-bottom-distance-pwa) + env(safe-area-inset-bottom, 0px));
