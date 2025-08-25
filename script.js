@@ -170,63 +170,61 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function copiarMensaje() {
-        if (!output.innerHTML || output.innerHTML.includes("Por favor") || output.innerHTML === 'Aquí aparecerá el mensaje para copiar...') return;
-        // Convertir HTML de vuelta a texto plano con formato WhatsApp
-        let textoParaCopiar = output.innerHTML;
-        textoParaCopiar = textoParaCopiar.replace(/<strong>(.*?)<\/strong>/g, '*$1*'); // Convertir <strong> a *texto*
-        textoParaCopiar = textoParaCopiar.replace(/<br>/g, '\n'); // Convertir <br> a saltos de línea
-        textoParaCopiar = textoParaCopiar.replace(/<[^>]*>/g, ''); // Remover cualquier otra etiqueta HTML restante
-        // Función mejorada para móviles
+        // Reconstruir texto a partir del HTML preservando negritas como *texto* y saltos de línea
+        let textoParaCopiar = (output.innerHTML || '')
+            // Negritas HTML a negritas de WhatsApp
+            .replace(/<(strong|b)>([\s\S]*?)<\/\1>/gi, '*$2*')
+            // Saltos de línea
+            .replace(/<br\s*\/?>(?!\n)/gi, '\n')
+            // Cerrar bloques como nueva línea
+            .replace(/<\/(p|div|li|h1|h2|h3)>/gi, '\n')
+            // Eliminar aperturas de bloques
+            .replace(/<(p|div|li|ul|ol|h1|h2|h3)[^>]*>/gi, '')
+            // Entidades comunes
+            .replace(/&nbsp;/gi, ' ')
+            .replace(/&amp;/gi, '&')
+            .replace(/&lt;/gi, '<')
+            .replace(/&gt;/gi, '>')
+            // Eliminar cualquier otra etiqueta
+            .replace(/<[^>]*>/g, '')
+            // Normalizar saltos de línea múltiples
+            .replace(/\n{3,}/g, '\n\n')
+            .trim();
+
+        if (!textoParaCopiar || textoParaCopiar.includes('Por favor') || textoParaCopiar === 'Aquí aparecerá el mensaje para copiar...') return;
+
+        // Función que intenta usar el portapapeles moderno y cae al textarea temporal en caso de error
         function copiarTexto(texto) {
-            // Método 1: Navigator clipboard (funciona en HTTPS)
             if (navigator.clipboard && window.isSecureContext) {
                 return navigator.clipboard.writeText(texto);
-            } 
-            // Método 2: Fallback para móviles y HTTP
-            else {
-                return new Promise((resolve, reject) => {
-                    // Crear un textarea temporal
-                    const textArea = document.createElement('textarea');
-                    textArea.value = texto;
-                    textArea.style.position = 'fixed';
-                    textArea.style.left = '-999999px';
-                    textArea.style.top = '-999999px';
-                    document.body.appendChild(textArea);
-                    // En móviles, es mejor usar contentEditable
-                    if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
-                        textArea.contentEditable = true;
-                        textArea.readOnly = false;
-                        const range = document.createRange();
-                        range.selectNodeContents(textArea);
-                        const sel = window.getSelection();
-                        sel.removeAllRanges();
-                        sel.addRange(range);
-                        textArea.setSelectionRange(0, 999999);
-                    } else {
-                        textArea.select();
-                    }
-                    try {
-                        const successful = document.execCommand('copy');
-                        document.body.removeChild(textArea);
-                        if (successful) {
-                            resolve();
-                        } else {
-                            reject(new Error('Copy command failed'));
-                        }
-                    } catch (err) {
-                        document.body.removeChild(textArea);
-                        reject(err);
-                    }
-                });
             }
+            return new Promise((resolve, reject) => {
+                const textArea = document.createElement('textarea');
+                textArea.value = texto;
+                // Evitar que salte el viewport
+                textArea.setAttribute('readonly', '');
+                textArea.style.position = 'absolute';
+                textArea.style.left = '-9999px';
+                document.body.appendChild(textArea);
+                textArea.select();
+                textArea.setSelectionRange(0, textArea.value.length);
+                try {
+                    const ok = document.execCommand('copy');
+                    document.body.removeChild(textArea);
+                    if (ok) resolve(); else reject(new Error('execCommand returned false'));
+                } catch (err) {
+                    document.body.removeChild(textArea);
+                    reject(err);
+                }
+            });
         }
-        copiarTexto(textoParaCopiar).then(() => {
+
+    copiarTexto(textoParaCopiar).then(() => {
             const originalText = copyBtn.textContent;
-            copyBtn.textContent = '¡Copiado!';
+            copyBtn.textContent = 'Copiado!';
             setTimeout(() => { copyBtn.textContent = originalText; }, 2000);
-        }).catch(err => { 
-            console.error('Error al copiar: ', err); 
-            // Fallback final: mostrar el texto para copiar manualmente
+        }).catch(err => {
+            console.error('Error al copiar: ', err);
             alert('No se pudo copiar automáticamente. Selecciona y copia el texto del área de mensaje.');
             // Seleccionar todo el texto en el div output para facilitar la copia manual
             const range = document.createRange();
