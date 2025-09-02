@@ -34,26 +34,18 @@
       "diaSemana": "Martes"
     },
     {
-      "apoderado": "Esteban",
-      "alumnos": [
-        { "nombre": "Emilio", "hora": "15:45" },
-        { "nombre": "Josefa", "hora": "16:30" }
-      ],
-      "diaSemana": "Martes"
-    },
-    {
       "apoderado": "Amalia",
       "alumnos": [
-        { "nombre": "Lucas", "hora": "17:00" }
+        { "nombre": "Lucas", "hora": "16:10" }
       ],
       "diaSemana": "Martes"
     },
       {
-      "apoderado": "Constanza",
+      "apoderado": "Tere",
       "alumnos": [
-        { "nombre": "Dante", "hora": "15:10" }
+        { "nombre": "José Antonio ", "hora": "17:30" }
       ],
-      "diaSemana": "Miércoles"
+      "diaSemana": "Martes"
     },
     {
       "apoderado": "Elisa",
@@ -107,13 +99,6 @@
         { "nombre": "Agustín", "hora": "17:00" }
       ],
       "diaSemana": "Viernes"
-    },
-       {
-      "apoderado": "Tere",
-      "alumnos": [
-        { "nombre": "Toño", "hora": "09:00" }
-      ],
-      "diaSemana": "Sábado"
     }
   ]
 }
